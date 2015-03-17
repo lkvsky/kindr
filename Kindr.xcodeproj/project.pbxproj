@@ -20,10 +20,14 @@
 		3C3A35371A93A7AA007598FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C3A35361A93A7AA007598FD /* Images.xcassets */; };
 		3C3A353A1A93A7AB007598FD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C3A35381A93A7AA007598FD /* LaunchScreen.xib */; };
 		3C3A35461A93A7AB007598FD /* KindrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3A35451A93A7AB007598FD /* KindrTests.m */; };
+		3C754CC61AB37F8F008B20E7 /* KindrTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C754CC51AB37F8F008B20E7 /* KindrTableViewController.m */; };
+		3C754CC91AB72578008B20E7 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C754CC81AB72578008B20E7 /* PostCell.m */; };
 		3CDDB2CD1AA4FF3D001193CA /* KindrTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2CC1AA4FF3D001193CA /* KindrTabController.m */; };
 		3CDDB2D01AA63F5F001193CA /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2CF1AA63F5F001193CA /* Post.m */; };
-		3CDDB2D31AA63FC2001193CA /* SavedPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2D21AA63FC2001193CA /* SavedPostViewController.m */; };
 		3CDDB2D61AAA4FDE001193CA /* Credentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2D51AAA4FDE001193CA /* Credentials.m */; };
+		3CDDB2D91AAE2EE6001193CA /* Post+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2D81AAE2EE6001193CA /* Post+Utilities.m */; };
+		3CDDB2DD1AB1E88E001193CA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDDB2DB1AB1E88E001193CA /* Crashlytics.framework */; };
+		3CDDB2DE1AB1E88E001193CA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDDB2DC1AB1E88E001193CA /* Fabric.framework */; };
 		A15B945102436DDAE72B0A95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8383EE5F7648A118A283F3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -62,14 +66,20 @@
 		3C3A353F1A93A7AB007598FD /* KindrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KindrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C3A35441A93A7AB007598FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C3A35451A93A7AB007598FD /* KindrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KindrTests.m; sourceTree = "<group>"; };
+		3C754CC41AB37F8F008B20E7 /* KindrTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KindrTableViewController.h; sourceTree = "<group>"; };
+		3C754CC51AB37F8F008B20E7 /* KindrTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KindrTableViewController.m; sourceTree = "<group>"; };
+		3C754CC71AB72578008B20E7 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
+		3C754CC81AB72578008B20E7 /* PostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCell.m; sourceTree = "<group>"; };
 		3CDDB2CB1AA4FF3D001193CA /* KindrTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KindrTabController.h; sourceTree = "<group>"; };
 		3CDDB2CC1AA4FF3D001193CA /* KindrTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KindrTabController.m; sourceTree = "<group>"; };
 		3CDDB2CE1AA63F5F001193CA /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
 		3CDDB2CF1AA63F5F001193CA /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
-		3CDDB2D11AA63FC2001193CA /* SavedPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedPostViewController.h; sourceTree = "<group>"; };
-		3CDDB2D21AA63FC2001193CA /* SavedPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedPostViewController.m; sourceTree = "<group>"; };
 		3CDDB2D41AAA4FDE001193CA /* Credentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Credentials.h; sourceTree = "<group>"; };
 		3CDDB2D51AAA4FDE001193CA /* Credentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Credentials.m; sourceTree = "<group>"; };
+		3CDDB2D71AAE2EE6001193CA /* Post+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Post+Utilities.h"; sourceTree = "<group>"; };
+		3CDDB2D81AAE2EE6001193CA /* Post+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Post+Utilities.m"; sourceTree = "<group>"; };
+		3CDDB2DB1AB1E88E001193CA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		3CDDB2DC1AB1E88E001193CA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		9A8383EE5F7648A118A283F3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF11F36CFE4CFBE02D123CDC /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,7 +90,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C1FBE371A9FCA65002CBFFE /* CoreData.framework in Frameworks */,
+				3CDDB2DD1AB1E88E001193CA /* Crashlytics.framework in Frameworks */,
 				A15B945102436DDAE72B0A95 /* libPods.a in Frameworks */,
+				3CDDB2DE1AB1E88E001193CA /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +118,8 @@
 		3C3A351D1A93A7AA007598FD = {
 			isa = PBXGroup;
 			children = (
+				3CDDB2DB1AB1E88E001193CA /* Crashlytics.framework */,
+				3CDDB2DC1AB1E88E001193CA /* Fabric.framework */,
 				3C3A35281A93A7AA007598FD /* Kindr */,
 				3C3A35421A93A7AB007598FD /* KindrTests */,
 				3C3A35271A93A7AA007598FD /* Products */,
@@ -132,14 +146,14 @@
 				3C1FBE2B1A967790002CBFFE /* PostDetailViewController.m */,
 				3C3A35301A93A7AA007598FD /* PostListViewController.h */,
 				3C3A35311A93A7AA007598FD /* PostListViewController.m */,
-				3CDDB2D11AA63FC2001193CA /* SavedPostViewController.h */,
-				3CDDB2D21AA63FC2001193CA /* SavedPostViewController.m */,
 				3CDDB2CB1AA4FF3D001193CA /* KindrTabController.h */,
 				3CDDB2CC1AA4FF3D001193CA /* KindrTabController.m */,
 				3C1FBE211A94F761002CBFFE /* KindrNavigationController.h */,
 				3C1FBE221A94F761002CBFFE /* KindrNavigationController.m */,
 				3C1FBE241A951931002CBFFE /* PostItemView.h */,
 				3C1FBE251A951931002CBFFE /* PostItemView.m */,
+				3C754CC71AB72578008B20E7 /* PostCell.h */,
+				3C754CC81AB72578008B20E7 /* PostCell.m */,
 				3C1FBE2D1A9E476A002CBFFE /* APIClient.h */,
 				3C1FBE2E1A9E476A002CBFFE /* APIClient.m */,
 				3CDDB2D41AAA4FDE001193CA /* Credentials.h */,
@@ -148,8 +162,12 @@
 				3C1FBE331A9FC33A002CBFFE /* Model.xcdatamodeld */,
 				3CDDB2CE1AA63F5F001193CA /* Post.h */,
 				3CDDB2CF1AA63F5F001193CA /* Post.m */,
+				3CDDB2D71AAE2EE6001193CA /* Post+Utilities.h */,
+				3CDDB2D81AAE2EE6001193CA /* Post+Utilities.m */,
 				3C3A35381A93A7AA007598FD /* LaunchScreen.xib */,
 				3C3A35331A93A7AA007598FD /* Main.storyboard */,
+				3C754CC41AB37F8F008B20E7 /* KindrTableViewController.h */,
+				3C754CC51AB37F8F008B20E7 /* KindrTableViewController.m */,
 				3C3A35291A93A7AA007598FD /* Supporting Files */,
 			);
 			path = Kindr;
@@ -202,6 +220,7 @@
 				3C3A35231A93A7AA007598FD /* Frameworks */,
 				3C3A35241A93A7AA007598FD /* Resources */,
 				26EC4DA108ED38F11A88D3BC /* Copy Pods Resources */,
+				3CDDB2DA1AB1E850001193CA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -304,6 +323,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3CDDB2DA1AB1E850001193CA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5c53bd25854c4f950b22eaba9765836b3bf7e8bc e728d8713e77861979e6ce44034f90be088c71192822262e6043b746d3622030";
+		};
 		F99C0F9B1759DCD23EB1F696 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -327,10 +359,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C3A35321A93A7AA007598FD /* PostListViewController.m in Sources */,
-				3CDDB2D31AA63FC2001193CA /* SavedPostViewController.m in Sources */,
 				3CDDB2D61AAA4FDE001193CA /* Credentials.m in Sources */,
 				3C3A352F1A93A7AA007598FD /* AppDelegate.m in Sources */,
 				3C1FBE2C1A967790002CBFFE /* PostDetailViewController.m in Sources */,
+				3CDDB2D91AAE2EE6001193CA /* Post+Utilities.m in Sources */,
+				3C754CC61AB37F8F008B20E7 /* KindrTableViewController.m in Sources */,
 				3C1FBE261A951931002CBFFE /* PostItemView.m in Sources */,
 				3C3A352C1A93A7AA007598FD /* main.m in Sources */,
 				3C1FBE351A9FC33A002CBFFE /* Model.xcdatamodeld in Sources */,
@@ -338,6 +371,7 @@
 				3CDDB2D01AA63F5F001193CA /* Post.m in Sources */,
 				3C1FBE231A94F761002CBFFE /* KindrNavigationController.m in Sources */,
 				3C1FBE2F1A9E476A002CBFFE /* APIClient.m in Sources */,
+				3C754CC91AB72578008B20E7 /* PostCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +496,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Kindr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -476,6 +514,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Kindr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -70,60 +70,31 @@
             </objects>
             <point key="canvasLocation" x="1230" y="-390.75"/>
         </scene>
-        <!--Saved Post View Controller-->
-        <scene sceneID="EqX-9K-tsp">
+        <!--Kindr Table View Controller-->
+        <scene sceneID="2sO-RS-iw6">
             <objects>
-                <viewController id="Ryv-GG-wOh" customClass="SavedPostViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ALW-3n-AA0"/>
-                        <viewControllerLayoutGuide type="bottom" id="sjO-WP-rtG"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ryc-Gn-k8F">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <tableViewController id="u3a-YM-Kfa" customClass="KindrTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8gv-Mi-pB2">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ow6-OV-r9p">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            </scrollView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Ow6-OV-r9p" firstAttribute="leading" secondItem="ryc-Gn-k8F" secondAttribute="leading" id="J78-0Q-CKe"/>
-                            <constraint firstAttribute="trailing" secondItem="Ow6-OV-r9p" secondAttribute="trailing" id="KUc-6G-EsE"/>
-                            <constraint firstItem="Ow6-OV-r9p" firstAttribute="top" secondItem="ryc-Gn-k8F" secondAttribute="top" id="sgL-gZ-Zkb"/>
-                            <constraint firstAttribute="bottom" secondItem="Ow6-OV-r9p" secondAttribute="bottom" id="w64-CA-bPf"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="Ow6-OV-r9p"/>
-                            </mask>
-                            <mask key="constraints">
-                                <exclude reference="J78-0Q-CKe"/>
-                                <exclude reference="KUc-6G-EsE"/>
-                                <exclude reference="sgL-gZ-Zkb"/>
-                                <exclude reference="w64-CA-bPf"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="Ow6-OV-r9p"/>
-                            </mask>
-                            <mask key="constraints">
-                                <include reference="J78-0Q-CKe"/>
-                                <include reference="KUc-6G-EsE"/>
-                                <include reference="sgL-gZ-Zkb"/>
-                                <include reference="w64-CA-bPf"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <navigationItem key="navigationItem" id="QwY-Hr-lB2"/>
-                    <connections>
-                        <outlet property="scrollView" destination="Ow6-OV-r9p" id="wFo-7x-sYY"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="w6X-Wu-Moe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Kept Post" id="xgW-TK-dxg" customClass="PostCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xgW-TK-dxg" id="wBc-m9-OhW">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="u3a-YM-Kfa" id="G1h-Tg-Tvu"/>
+                            <outlet property="delegate" destination="u3a-YM-Kfa" id="aPS-Dx-319"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="wGo-yP-0nG"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r5c-Fd-7Kl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2085" y="502.5"/>
+            <point key="canvasLocation" x="2044" y="1433"/>
         </scene>
         <!--Kindr Tab Controller-->
         <scene sceneID="DEb-fh-lrf">
@@ -156,7 +127,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Ryv-GG-wOh" kind="relationship" relationship="rootViewController" id="klZ-zq-Azj"/>
+                        <segue destination="u3a-YM-Kfa" kind="relationship" relationship="rootViewController" id="zMd-xs-1lK"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6QV-SU-8vx" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -11,6 +11,7 @@
 #import "PostItemView.h"
 #import "PostDetailViewController.h"
 #import "APIClient.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface PostListViewController ()
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activitySpinner;

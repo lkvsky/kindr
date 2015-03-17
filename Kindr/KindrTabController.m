@@ -8,7 +8,7 @@
 
 #import "KindrTabController.h"
 #import "PostListViewController.h"
-#import "SavedPostViewController.h"
+#import "KindrTabController.h"
 
 @interface KindrTabController ()
 

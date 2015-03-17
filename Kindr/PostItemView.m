@@ -7,7 +7,7 @@
 //
 
 #import "PostItemView.h"
-#import "Post.h"
+#import "Post+Utilities.h"
 
 @interface PostItemView ()
 @property (strong, nonatomic) UIImage *postImage;
@@ -62,6 +62,7 @@
         UIImageView *background = [[UIImageView alloc] initWithImage:self.postImage];
         float aspectRatio = self.postImage.size.height / self.postImage.size.width;
         background.frame = CGRectMake(0, 0, self.frame.size.height / aspectRatio, self.frame.size.height);
+        background.center = CGPointMake(self.center.x, background.center.y);
         
         [self addSubview:background];
         [self sendSubviewToBack:background];
@@ -152,9 +153,18 @@
     
     // content
     UITextView *contentView = [[UITextView alloc] init];
+    NSAttributedString *attributedContent = [[NSAttributedString alloc]
+                                             initWithString:[self.post parseBlockElementsFromString:self.post.content]
+                                             attributes:@{NSFontAttributeName: [UIFont fontWithName:@"Helvetica Neue" size:16.0]}];
+//    NSString *content = [self.post parseBlockElementsFromString:self.post.content];
+//    content = [self.post parseInlineElementsFromString:content];
+//    content = [self.post stylizeItalicElementsFromStrong:content];
+//    content = [self.post stylizeBoldElementsFromStrong:content];
+    
     [contentView setEditable:NO];
-    [contentView setText:self.post.content];
+    [contentView setAttributedText:attributedContent];
     [contentView setScrollEnabled:NO];
+    contentView.userInteractionEnabled = YES;
     CGSize contentSize = [contentView sizeThatFits:CGSizeMake(viewWidth, FLT_MAX)];
     contentView.frame = CGRectMake(0, imageHeight + headlineSize.height, contentSize.width, contentSize.height);
     contentView.contentSize = contentSize;

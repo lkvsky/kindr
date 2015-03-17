@@ -48,7 +48,7 @@
                                                       @"images": @"images",
                                                       @"authorDisplayName": @"authorDisplayName",
                                                       @"defaultBlogId": @"defaultBlogId",
-                                                      @"content": @"content"}];
+                                                      @"display_html": @"content"}];
     postMapping.identificationAttributes = @[@"postId"];
 
     // register mappings with the provider using a response descriptor
