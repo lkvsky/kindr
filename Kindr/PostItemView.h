@@ -19,6 +19,5 @@
                     withImage:(UIImage *)image;
 - (void)renderCardView;
 - (void)renderDetailedView;
-- (void)renderFeedView;
 - (UIImage *)downloadPostImage;
 @end

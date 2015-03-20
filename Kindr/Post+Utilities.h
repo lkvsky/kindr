@@ -11,7 +11,4 @@
 
 @interface Post (Utilities)
 - (NSString *)parseBlockElementsFromString:(NSString *)content;
-//- (NSString *)parseInlineElementsFromString:(NSString *)content;
-//- (NSString *)stylizeItalicElementsFromStrong:(NSString *)content;
-//- (NSString *)stylizeBoldElementsFromStrong:(NSString *)content;
 @end

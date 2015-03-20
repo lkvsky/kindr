@@ -11,6 +11,7 @@
 #import "PostItemView.h"
 #import "PostDetailViewController.h"
 #import "APIClient.h"
+#import "ImageHelper.h"
 #import <Crashlytics/Crashlytics.h>
 
 @interface PostListViewController ()
@@ -145,11 +146,18 @@
     float controlDismissX = self.postCenter.x - postCenterOffset;
     float controlKeepX = self.postCenter.x + postCenterOffset - CONTROL_SIZE;
     float controlY = self.postCenter.y + postCenterOffset + CONTROL_MARGIN;
-    UIButton *dismiss = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    UIButton *keep = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *dismiss = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *keep = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIColor *kindrRed = [UIColor colorWithRed:211.0/255.0 green:65.0/255.0 blue:50.0/255.0 alpha:1.0];
+    UIColor *kindrOrange = [UIColor colorWithRed:254.0/255.0 green:111.0/255.0 blue:32.0/255.0 alpha:1.0];
     
     dismiss.frame = CGRectMake(controlDismissX, controlY, CONTROL_SIZE, CONTROL_SIZE);
     keep.frame = CGRectMake(controlKeepX, controlY, CONTROL_SIZE, CONTROL_SIZE);
+    
+    dismiss.imageView.tintColor = kindrRed;
+    dismiss.layer.borderColor = kindrRed.CGColor;
+    keep.imageView.tintColor = kindrOrange;
+    keep.layer.borderColor = kindrOrange.CGColor;
     
     [dismiss setImage:[UIImage imageNamed:@"close2"] forState:UIControlStateNormal];
     [keep setImage:[UIImage imageNamed:@"fire14"] forState:UIControlStateNormal];
@@ -163,7 +171,6 @@
     
     for (UIButton *button in [[NSArray alloc] initWithObjects:keep, dismiss, nil]) {
         button.layer.borderWidth = 0.5;
-        button.layer.borderColor = [UIColor grayColor].CGColor;
         button.layer.cornerRadius = CONTROL_SIZE / 2;
     }
 
@@ -194,6 +201,7 @@
 
 - (void)touchDismissButton:(UIButton *)sender
 {
+    [[ImageHelper sharedInstance] removeImageWithUrl:self.postView.post.images[0]];
     [self.sharedAPIClient savePost:self.postView.post asKept:NO];
     [self animateView:self.postView
               toPoint:CGPointMake(0 - self.view.frame.size.width + (self.postView.frame.size.width / 2), self.postView.center.y + 100)
@@ -206,6 +214,7 @@
     [self animateView:self.postView
               toPoint:CGPointMake(self.view.frame.size.width + (self.postView.frame.size.width / 2), self.postView.center.y + 100)
            andReplace:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PostKept" object:self];
 }
 
 #define PAN_BREAKPOINT 75

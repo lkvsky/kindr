@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "Post.h"
 
+@protocol SwipeablePostCell <NSObject>
+- (void)tapDelete:(NSString *)headline;
+@end
+
 @interface PostCell : UITableViewCell
+@property (weak, nonatomic) id <SwipeablePostCell> delegate;
 - (void)configureWithPost:(Post *)post;
 @end

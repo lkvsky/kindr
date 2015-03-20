@@ -12,29 +12,13 @@
 #import "PostDetailViewController.h"
 #import "PostCell.h"
 
-@interface KindrTableViewController ()
-@property (strong, nonatomic) NSMutableArray *posts;
+@interface KindrTableViewController () <SwipeablePostCell>
 @property (nonatomic, strong) APIClient *sharedAPIClient;
 @end
 
 @implementation KindrTableViewController
 
 #pragma mark - Properties
-
-- (NSMutableArray *)posts
-{
-    if (!_posts) {
-        NSArray *keptPosts = [self.sharedAPIClient getKeptPosts];
-        
-        if (!keptPosts) {
-            keptPosts = @[];
-        }
-        
-        _posts = [[NSMutableArray alloc] initWithArray:keptPosts];
-    }
-    
-    return _posts;
-}
 
 - (APIClient *)sharedAPIClient
 {
@@ -57,6 +41,17 @@
     kindrImageView.frame = CGRectMake(0, 0, kindrImageView.superview.frame.size.width, 45);
     [self.navigationItem setTitleView:kindrImageView];
     
+    // table setup
+    [self.tableView registerNib:[UINib nibWithNibName:@"PostCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"PostCell"];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.tableView.backgroundColor = [UIColor colorWithRed:225.0/255.0 green:225.0/255.0 blue:225.0/255.0 alpha:1.0];
+    
+    // listen for new kept posts
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keptPostAdded:)
+                                                 name:@"PostKept"
+                                               object:nil];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -64,16 +59,34 @@
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-//    [self.tableView reloadData];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Events
+
+- (void)tapDelete:(NSString *)postId
+{
+    NSArray *posts = [self.sharedAPIClient getKeptPosts];
+    NSPredicate *findPost = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        Post *targetPost = (Post *)evaluatedObject;
+        
+        return [targetPost.postId isEqualToString:postId];
+    }];
+    NSArray *filteredPosts = [posts filteredArrayUsingPredicate:findPost];
+    
+    if ([filteredPosts count]) {
+        Post *deletedPost = filteredPosts[0];
+        [self.sharedAPIClient savePost:deletedPost asKept:NO];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (void)keptPostAdded:(NSNotification *)notification
+{
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - Table view data source
@@ -87,21 +100,25 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.posts count];
+    return [[self.sharedAPIClient getKeptPosts] count];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *postCellIdentifier = @"Kept Post";
+    NSString *postCellIdentifier = @"PostCell";
     PostCell *cell = [tableView dequeueReusableCellWithIdentifier:postCellIdentifier forIndexPath:indexPath];
- 
-    if (!cell) {
-        cell = [[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:postCellIdentifier];
+    NSArray *posts = [self.sharedAPIClient getKeptPosts];
+    
+    if (cell == nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:postCellIdentifier owner:self options:nil];
+        cell = [nib objectAtIndex:0];
     }
     
-    if (indexPath.row < [self.posts count]) {
-        Post *post = (Post *)self.posts[indexPath.row];
+    cell.delegate = self;
+    
+    if (indexPath.row < [posts count]) {
+        Post *post = (Post *)posts[indexPath.row];
         [cell configureWithPost:post];
     }
     
@@ -110,7 +127,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Post *post = self.posts[indexPath.row];
+    Post *post = [self.sharedAPIClient getKeptPosts][indexPath.row];
     PostDetailViewController *destinationVc = [[PostDetailViewController alloc] init];
     destinationVc.post = post;
     [self.navigationController pushViewController:destinationVc animated:YES];
@@ -118,7 +135,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.tableView.frame.size.width * 0.5;
+    return 100;
 }
 
 

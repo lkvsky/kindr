@@ -77,14 +77,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8gv-Mi-pB2">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Kept Post" id="xgW-TK-dxg" customClass="PostCell">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xgW-TK-dxg" id="wBc-m9-OhW">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
+                        <sections/>
                         <connections>
                             <outlet property="dataSource" destination="u3a-YM-Kfa" id="G1h-Tg-Tvu"/>
                             <outlet property="delegate" destination="u3a-YM-Kfa" id="aPS-Dx-319"/>
@@ -94,7 +87,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r5c-Fd-7Kl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2044" y="1433"/>
+            <point key="canvasLocation" x="2086.5" y="336.75"/>
         </scene>
         <!--Kindr Tab Controller-->
         <scene sceneID="DEb-fh-lrf">
@@ -132,7 +125,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6QV-SU-8vx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1230" y="503"/>
+            <point key="canvasLocation" x="1230" y="336.75"/>
         </scene>
     </scenes>
     <resources>
