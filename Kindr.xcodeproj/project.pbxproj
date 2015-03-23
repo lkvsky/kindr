@@ -24,6 +24,7 @@
 		3C754CC91AB72578008B20E7 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C754CC81AB72578008B20E7 /* PostCell.m */; };
 		3C754CCB1AB9C133008B20E7 /* PostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C754CCA1AB9C133008B20E7 /* PostCell.xib */; };
 		3C754CCE1ABCA9DB008B20E7 /* ImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C754CCD1ABCA9DB008B20E7 /* ImageHelper.m */; };
+		3C754CD11AC087E4008B20E7 /* KindrButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C754CD01AC087E4008B20E7 /* KindrButton.m */; };
 		3CDDB2CD1AA4FF3D001193CA /* KindrTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2CC1AA4FF3D001193CA /* KindrTabController.m */; };
 		3CDDB2D01AA63F5F001193CA /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2CF1AA63F5F001193CA /* Post.m */; };
 		3CDDB2D61AAA4FDE001193CA /* Credentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDB2D51AAA4FDE001193CA /* Credentials.m */; };
@@ -75,6 +76,8 @@
 		3C754CCA1AB9C133008B20E7 /* PostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PostCell.xib; path = ../PostCell.xib; sourceTree = "<group>"; };
 		3C754CCC1ABCA9DB008B20E7 /* ImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageHelper.h; sourceTree = "<group>"; };
 		3C754CCD1ABCA9DB008B20E7 /* ImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageHelper.m; sourceTree = "<group>"; };
+		3C754CCF1AC087E4008B20E7 /* KindrButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KindrButton.h; sourceTree = "<group>"; };
+		3C754CD01AC087E4008B20E7 /* KindrButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KindrButton.m; sourceTree = "<group>"; };
 		3CDDB2CB1AA4FF3D001193CA /* KindrTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KindrTabController.h; sourceTree = "<group>"; };
 		3CDDB2CC1AA4FF3D001193CA /* KindrTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KindrTabController.m; sourceTree = "<group>"; };
 		3CDDB2CE1AA63F5F001193CA /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
@@ -163,20 +166,22 @@
 				3C1FBE2E1A9E476A002CBFFE /* APIClient.m */,
 				3CDDB2D41AAA4FDE001193CA /* Credentials.h */,
 				3CDDB2D51AAA4FDE001193CA /* Credentials.m */,
-				3C3A35361A93A7AA007598FD /* Images.xcassets */,
-				3C1FBE331A9FC33A002CBFFE /* Model.xcdatamodeld */,
 				3CDDB2CE1AA63F5F001193CA /* Post.h */,
 				3CDDB2CF1AA63F5F001193CA /* Post.m */,
 				3CDDB2D71AAE2EE6001193CA /* Post+Utilities.h */,
 				3CDDB2D81AAE2EE6001193CA /* Post+Utilities.m */,
 				3C754CC41AB37F8F008B20E7 /* KindrTableViewController.h */,
 				3C754CC51AB37F8F008B20E7 /* KindrTableViewController.m */,
+				3C754CCC1ABCA9DB008B20E7 /* ImageHelper.h */,
+				3C754CCD1ABCA9DB008B20E7 /* ImageHelper.m */,
+				3C754CCF1AC087E4008B20E7 /* KindrButton.h */,
+				3C754CD01AC087E4008B20E7 /* KindrButton.m */,
 				3C754CCA1AB9C133008B20E7 /* PostCell.xib */,
 				3C3A35381A93A7AA007598FD /* LaunchScreen.xib */,
 				3C3A35331A93A7AA007598FD /* Main.storyboard */,
+				3C3A35361A93A7AA007598FD /* Images.xcassets */,
+				3C1FBE331A9FC33A002CBFFE /* Model.xcdatamodeld */,
 				3C3A35291A93A7AA007598FD /* Supporting Files */,
-				3C754CCC1ABCA9DB008B20E7 /* ImageHelper.h */,
-				3C754CCD1ABCA9DB008B20E7 /* ImageHelper.m */,
 			);
 			path = Kindr;
 			sourceTree = "<group>";
@@ -379,6 +384,7 @@
 				3C754CCE1ABCA9DB008B20E7 /* ImageHelper.m in Sources */,
 				3CDDB2CD1AA4FF3D001193CA /* KindrTabController.m in Sources */,
 				3CDDB2D01AA63F5F001193CA /* Post.m in Sources */,
+				3C754CD11AC087E4008B20E7 /* KindrButton.m in Sources */,
 				3C1FBE231A94F761002CBFFE /* KindrNavigationController.m in Sources */,
 				3C1FBE2F1A9E476A002CBFFE /* APIClient.m in Sources */,
 				3C754CC91AB72578008B20E7 /* PostCell.m in Sources */,

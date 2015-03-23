@@ -12,15 +12,14 @@
 #import "PostDetailViewController.h"
 #import "APIClient.h"
 #import "ImageHelper.h"
+#import "KindrButton.h"
 #import <Crashlytics/Crashlytics.h>
 
 @interface PostListViewController ()
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activitySpinner;
 @property (strong, nonatomic) NSMutableArray *posts;
-@property (weak, nonatomic) Post *selectedPost;
 @property (weak, nonatomic) APIClient *sharedAPIClient;
 @property (strong, nonatomic) PostItemView *postView;
-@property (nonatomic) CGPoint postCenter;
 @property (nonatomic) int postIndex;
 @end
 
@@ -49,7 +48,10 @@
     [self loadPostsWithParams:@{@"start":@"0"}
                       success:^(NSArray *results) {
                           _posts = [[NSMutableArray alloc] initWithArray:results];
-                          [self startFirstView];
+                          [self.activitySpinner stopAnimating];
+                          [self queueNextPost];
+                          [self queueNextPost];
+                          [self renderControls];
                       }];
 }
 
@@ -74,13 +76,6 @@
                                   }];
 }
 
-- (void)startFirstView
-{
-    [self.activitySpinner stopAnimating];
-    [self queueNextPost];
-    [self renderControls];
-}
-
 #define POSTSIZE 300
 #define CONTROL_MARGIN 20
 #define CONTROL_SIZE 100
@@ -88,10 +83,11 @@
 - (void)renderCurrentPost
 {
     Post *post = self.posts[self.postIndex];
-    self.postView = [[PostItemView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - POSTSIZE) / 2, (self.view.frame.size.height - POSTSIZE - CONTROL_SIZE - CONTROL_MARGIN) / 2, POSTSIZE, POSTSIZE)
+    self.postView = [[PostItemView alloc] initWithFrame:CGRectMake(0, 0, POSTSIZE, POSTSIZE)
                                                withPost:post];
+    self.postView.center = [self getPostCenter];
     [self.view addSubview:self.postView];
-    self.postCenter = self.postView.center;
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(tapPost:)];
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -142,38 +138,22 @@
 
 - (void)renderControls
 {
+    CGPoint postCenter = [self getPostCenter];
     float postCenterOffset = POSTSIZE / 2;
-    float controlDismissX = self.postCenter.x - postCenterOffset;
-    float controlKeepX = self.postCenter.x + postCenterOffset - CONTROL_SIZE;
-    float controlY = self.postCenter.y + postCenterOffset + CONTROL_MARGIN;
-    UIButton *dismiss = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIButton *keep = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIColor *kindrRed = [UIColor colorWithRed:211.0/255.0 green:65.0/255.0 blue:50.0/255.0 alpha:1.0];
-    UIColor *kindrOrange = [UIColor colorWithRed:254.0/255.0 green:111.0/255.0 blue:32.0/255.0 alpha:1.0];
-    
-    dismiss.frame = CGRectMake(controlDismissX, controlY, CONTROL_SIZE, CONTROL_SIZE);
-    keep.frame = CGRectMake(controlKeepX, controlY, CONTROL_SIZE, CONTROL_SIZE);
-    
-    dismiss.imageView.tintColor = kindrRed;
-    dismiss.layer.borderColor = kindrRed.CGColor;
-    keep.imageView.tintColor = kindrOrange;
-    keep.layer.borderColor = kindrOrange.CGColor;
-    
-    [dismiss setImage:[UIImage imageNamed:@"close2"] forState:UIControlStateNormal];
-    [keep setImage:[UIImage imageNamed:@"fire14"] forState:UIControlStateNormal];
+    float controlDismissX = postCenter.x - postCenterOffset;
+    float controlKeepX = postCenter.x + postCenterOffset - CONTROL_SIZE;
+    float controlY = postCenter.y + postCenterOffset + CONTROL_MARGIN;
+    KindrButton *dismiss = [[KindrButton alloc] initWithImage:[UIImage imageNamed:@"close2"]
+                                                withTintColor:[UIColor blackColor]
+                                                    withFrame:CGRectMake(controlDismissX, controlY, CONTROL_SIZE, CONTROL_SIZE)];
+    KindrButton *keep = [[KindrButton alloc] initWithImage:[UIImage imageNamed:@"fire14"]
+                                             withTintColor:[UIColor colorWithRed:254.0/255.0 green:111.0/255.0 blue:32.0/255.0 alpha:1.0] withFrame:CGRectMake(controlKeepX, controlY, CONTROL_SIZE, CONTROL_SIZE)];
     [dismiss addTarget:self
-               action:@selector(touchDismissButton:)
-     forControlEvents:UIControlEventTouchUpInside];
-    
+                action:@selector(touchDismissButton:)
+      forControlEvents:UIControlEventTouchUpInside];
     [keep addTarget:self
-               action:@selector(touchKeepButton:)
-     forControlEvents:UIControlEventTouchUpInside];
-    
-    for (UIButton *button in [[NSArray alloc] initWithObjects:keep, dismiss, nil]) {
-        button.layer.borderWidth = 0.5;
-        button.layer.cornerRadius = CONTROL_SIZE / 2;
-    }
-
+             action:@selector(touchKeepButton:)
+   forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:dismiss];
     [self.view addSubview:keep];
 }
@@ -197,6 +177,11 @@
                      }];
 }
 
+- (CGPoint)getPostCenter
+{
+    return CGPointMake(self.view.center.x, self.view.center.y - (CONTROL_SIZE / 2));
+}
+
 # pragma gestures
 
 - (void)touchDismissButton:(UIButton *)sender
@@ -204,7 +189,7 @@
     [[ImageHelper sharedInstance] removeImageWithUrl:self.postView.post.images[0]];
     [self.sharedAPIClient savePost:self.postView.post asKept:NO];
     [self animateView:self.postView
-              toPoint:CGPointMake(0 - self.view.frame.size.width + (self.postView.frame.size.width / 2), self.postView.center.y + 100)
+              toPoint:CGPointMake(0 - self.view.frame.size.width + (POSTSIZE / 2), self.postView.center.y + 100)
            andReplace:YES];
 }
 
@@ -212,7 +197,7 @@
 {
     [self.sharedAPIClient savePost:self.postView.post asKept:YES];
     [self animateView:self.postView
-              toPoint:CGPointMake(self.view.frame.size.width + (self.postView.frame.size.width / 2), self.postView.center.y + 100)
+              toPoint:CGPointMake(self.view.frame.size.width + (POSTSIZE / 2), self.postView.center.y + 100)
            andReplace:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PostKept" object:self];
 }
@@ -223,7 +208,8 @@
 {
     PostItemView *targetView = (PostItemView *)sender.view;
     CGPoint translation = [sender translationInView:targetView];
-    float xDifference = self.postCenter.x - (sender.view.center.x + translation.x);
+    CGPoint postCenter = [self getPostCenter];
+    float xDifference = postCenter.x - (sender.view.center.x + translation.x);
     float newY = sender.view.center.y + translation.y;
     
     targetView.center = CGPointMake(sender.view.center.x + translation.x, newY);
@@ -239,7 +225,7 @@
             [self.sharedAPIClient savePost:self.postView.post asKept:YES];
             newPoint = CGPointMake(self.view.frame.size.width + (targetView.frame.size.width / 2), self.postView.center.y + PAN_BREAKPOINT);
         } else {
-            newPoint = self.postCenter;
+            newPoint = postCenter;
             queuePost = NO;
         }
         

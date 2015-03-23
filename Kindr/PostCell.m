@@ -31,26 +31,47 @@
 
 - (void)swipePost:(UISwipeGestureRecognizer *)sender
 {
-    CGFloat deleteButtonOffset = CGRectGetWidth(self.deleteButton.frame);
     
     if (sender.direction == UISwipeGestureRecognizerDirectionLeft && !self.isOpen) {
-        self.rightConstraint.constant += deleteButtonOffset;
-        self.leftConstraint.constant -= deleteButtonOffset;
-        self.isOpen = YES;
+        [self openCell];
     }
     
     if (sender.direction == UISwipeGestureRecognizerDirectionRight && self.isOpen) {
-        self.rightConstraint.constant -= CGRectGetWidth(self.deleteButton.frame);
-        self.leftConstraint.constant += CGRectGetWidth(self.deleteButton.frame);
-        self.isOpen = NO;
+        [self closeCell];
     }
-    
+}
+
+#pragma mark - Rendering helper methods
+
+- (void)toggleConstraints
+{
     [self setNeedsUpdateConstraints];
-    
     [UIView animateWithDuration:0.125
                      animations:^{
                          [self layoutIfNeeded];
                      }];
+}
+
+- (void)closeCell
+{
+    CGFloat deleteButtonOffset = CGRectGetWidth(self.deleteButton.frame);
+    
+    self.rightConstraint.constant -= deleteButtonOffset;
+    self.leftConstraint.constant += deleteButtonOffset;
+    self.isOpen = NO;
+    
+    [self toggleConstraints];
+}
+
+- (void)openCell
+{
+    CGFloat deleteButtonOffset = CGRectGetWidth(self.deleteButton.frame);
+    
+    self.rightConstraint.constant += deleteButtonOffset;
+    self.leftConstraint.constant -= deleteButtonOffset;
+    self.isOpen = YES;
+    
+    [self toggleConstraints];
 }
 
 #pragma mark - Initialization
@@ -59,17 +80,19 @@
 {
     // delete button customization
     CAGradientLayer *gradient = [CAGradientLayer layer];
-    NSArray *colors = @[(id)[UIColor colorWithRed:254.0/255.0 green:111.0/255.0 blue:32.0/255.0 alpha:1.0].CGColor, (id)[UIColor colorWithRed:211.0/255.0 green:65.0/255.0 blue:50.0/255.0 alpha:1.0].CGColor];
+    NSArray *colors = @[(id)[UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0].CGColor, (id)[UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1.0].CGColor];
     gradient.colors = colors;
     gradient.frame = self.deleteButton.bounds;
     [self.deleteButton.layer insertSublayer:gradient atIndex:0];
+    [self.deleteButton setBackgroundColor:[UIColor colorWithRed:211.0/255.0 green:65.0/255.0 blue:50.0/255.0 alpha:1.0]];
     [self.deleteButton bringSubviewToFront:self.deleteButton.imageView];
-    [self.deleteButton.imageView setTintColor:[UIColor whiteColor]];
+    [self.deleteButton.imageView setTintColor:[UIColor blackColor]];
     
     // set shadow
     self.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.layer.shadowOpacity = 0.25;
-    self.layer.shadowOffset = CGSizeMake(0, 0.5);
+    self.layer.shadowOffset = CGSizeMake(0, 1);
+    self.layer.shadowRadius = 2.0;
     CGRect shadowFrame = self.layer.bounds;
     CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
     self.layer.shadowPath = shadowPath;
@@ -128,11 +151,20 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    frame.origin.y += 8;
+    frame.origin.y += 4;
     frame.size.height -= 2 * 4;
     frame.origin.x += 8;
     frame.size.width -= 2 * 8;
     [super setFrame:frame];
+}
+
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    
+    if (self.isOpen) {
+        [self closeCell];
+    }
 }
 
 @end

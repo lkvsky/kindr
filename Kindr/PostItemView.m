@@ -39,11 +39,18 @@
 
 - (void)renderCardView
 {
-    // general fame
-    self.layer.borderWidth = 0.5;
-    self.layer.borderColor = [UIColor grayColor].CGColor;
-    self.layer.cornerRadius = 5;
-    self.layer.masksToBounds = YES;
+    CGFloat cornerRadius = 5.0;
+    
+    // layer
+    self.layer.cornerRadius = cornerRadius;
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.layer.bounds cornerRadius:cornerRadius].CGPath;
+    self.layer.borderWidth = cornerRadius;
+    self.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.layer.shadowOpacity = 0.25;
+    self.layer.shadowOffset = CGSizeMake(0, 0);
+    self.layer.shadowRadius = cornerRadius;
+    self.layer.shadowPath = shadowPath;
     
     // headline
     UITextView *headlineView = [[UITextView alloc] init];
@@ -52,16 +59,16 @@
     [headlineView setEditable:NO];
     [headlineView setScrollEnabled:NO];
     CGSize headlineSize = [headlineView sizeThatFits:CGSizeMake(self.frame.size.width, FLT_MAX)];
-    headlineView.frame = CGRectMake(0, 0, self.frame.size.width, headlineSize.height);
+    headlineView.frame = CGRectMake(cornerRadius, cornerRadius, self.frame.size.width, headlineSize.height - (2 * cornerRadius));
     [self addSubview:headlineView];
-    headlineView.center = CGPointMake(headlineView.frame.size.width / 2, self.frame.size.height - (headlineView.frame.size.height / 2));
+    headlineView.center = CGPointMake(headlineView.frame.size.width / 2, self.frame.size.height - (headlineView.frame.size.height / 2) - cornerRadius);
     
     // background image
     dispatch_async(dispatch_get_main_queue(), ^{
         UIImageView *background = [[UIImageView alloc] initWithImage:self.postImage];
-        float aspectRatio = self.postImage.size.height / self.postImage.size.width;
-        background.frame = CGRectMake(0, 0, self.frame.size.height / aspectRatio, self.frame.size.height);
-        background.center = CGPointMake(self.center.x, background.center.y);
+        background.frame = CGRectMake(cornerRadius, cornerRadius, self.frame.size.width - (2 * cornerRadius), self.frame.size.height - (2 * cornerRadius));
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.clipsToBounds = YES;
         
         [self addSubview:background];
         [self sendSubviewToBack:background];
@@ -81,10 +88,21 @@
     CGSize headlineSize = [headlineView sizeThatFits:CGSizeMake(viewWidth, FLT_MAX)];
     headlineView.frame = CGRectMake(0, 0, headlineSize.width, headlineSize.height);
     
+    // byline
+    UITextView *bylineView = [[UITextView alloc] init];
+    NSMutableString *bylineString = [[NSMutableString alloc] initWithString:@"By: "];
+    [bylineString appendString:self.post.authorDisplayName];
+    NSAttributedString *byline = [[NSAttributedString alloc] initWithString:bylineString attributes:@{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]}];
+    [bylineView setAttributedText:byline];
+    [bylineView setEditable:NO];
+    [bylineView setScrollEnabled:NO];
+    CGSize bylineSize = [bylineView sizeThatFits:CGSizeMake(viewWidth, FLT_MAX)];
+    bylineView.frame = CGRectMake(0, headlineSize.height, bylineSize.width, bylineSize.height);
+    
     // image
     UIImageView *imageView = [[UIImageView alloc] initWithImage:self.postImage];
     float imageHeight = viewWidth * (self.postImage.size.height / self.postImage.size.width);
-    imageView.frame = CGRectMake(0, headlineSize.height, viewWidth, imageHeight);
+    imageView.frame = CGRectMake(0, bylineView.frame.origin.y + bylineSize.height, viewWidth, imageHeight);
     
     // content
     UITextView *contentView = [[UITextView alloc] init];
@@ -97,13 +115,14 @@
     [contentView setScrollEnabled:NO];
     contentView.userInteractionEnabled = YES;
     CGSize contentSize = [contentView sizeThatFits:CGSizeMake(viewWidth, FLT_MAX)];
-    contentView.frame = CGRectMake(0, imageHeight + headlineSize.height, contentSize.width, contentSize.height);
+    contentView.frame = CGRectMake(0, imageView.frame.origin.y + imageHeight, contentSize.width, contentSize.height);
     contentView.contentSize = contentSize;
     
     // add subviews to self
-    self.frame = CGRectMake(0, 0, viewWidth, headlineSize.height + imageHeight + contentSize.height);
+    self.frame = CGRectMake(0, 0, viewWidth, headlineSize.height + imageHeight + bylineSize.height + contentSize.height);
     [self addSubview:headlineView];
     [self addSubview:imageView];
+    [self addSubview:bylineView];
     [self addSubview:contentView];
 }
 
@@ -125,11 +144,10 @@
 
 - (void)setup
 {
-    self.backgroundColor = nil;
+    self.backgroundColor = [UIColor whiteColor];
     self.opaque = NO;
     self.contentMode = UIViewContentModeRedraw;
     self.userInteractionEnabled = YES;
-    self.clipsToBounds = YES;
 }
 
 - (void)awakeFromNib { [self setup]; }
