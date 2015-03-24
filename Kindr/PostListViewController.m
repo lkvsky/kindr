@@ -18,6 +18,7 @@
 @interface PostListViewController ()
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activitySpinner;
 @property (strong, nonatomic) NSMutableArray *posts;
+@property (strong, nonatomic) NSMutableArray *cardViews;
 @property (weak, nonatomic) APIClient *sharedAPIClient;
 @property (strong, nonatomic) PostItemView *postView;
 @property (nonatomic) int postIndex;
@@ -41,6 +42,13 @@
     return _postIndex;
 }
 
+- (NSMutableArray *)cardViews
+{
+    if (!_cardViews) _cardViews = [[NSMutableArray alloc] init];
+    
+    return _cardViews;
+}
+
 # pragma rendering
 
 - (void)loadPosts
@@ -49,8 +57,13 @@
                       success:^(NSArray *results) {
                           _posts = [[NSMutableArray alloc] initWithArray:results];
                           [self.activitySpinner stopAnimating];
-                          [self queueNextPost];
-                          [self queueNextPost];
+                          
+                          for (int i = 0; i < 3; i++) {
+                              [self queueNextPost];
+                              [self.cardViews addObject:[self renderPostWithIndex:self.postIndex]];
+                              [self arrangeCardViews];
+                          }
+                          
                           [self renderControls];
                       }];
 }
@@ -77,34 +90,36 @@
 }
 
 #define POSTSIZE 300
-#define CONTROL_MARGIN 20
+#define CONTROL_MARGIN 30
 #define CONTROL_SIZE 100
 
-- (void)renderCurrentPost
+- (PostItemView *)renderPostWithIndex:(int)index
 {
-    Post *post = self.posts[self.postIndex];
-    self.postView = [[PostItemView alloc] initWithFrame:CGRectMake(0, 0, POSTSIZE, POSTSIZE)
+    Post *post = self.posts[index];
+    PostItemView *postView = [[PostItemView alloc] initWithFrame:CGRectMake(0, 0, POSTSIZE, POSTSIZE)
                                                withPost:post];
-    self.postView.center = [self getPostCenter];
-    [self.view addSubview:self.postView];
-
+    postView.center = [self getPostCenter];
+    [self.view addSubview:postView];
+    [self.view sendSubviewToBack:postView];
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(tapPost:)];
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(panPost:)];
     
-    [self.postView addGestureRecognizer:tap];
-    [self.postView addGestureRecognizer:pan];
+    [postView addGestureRecognizer:tap];
+    [postView addGestureRecognizer:pan];
     
     // Asynchronously download image and render post
-    dispatch_queue_t aQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(aQueue, ^{
-        [self.postView downloadPostImage];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [postView downloadPostImage];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.postView renderCardView];
+            [postView renderCardView];
         });
     });
+    
+    return postView;
 }
 
 - (void)queueNextPost
@@ -118,6 +133,8 @@
                                       [_posts addObject:post];
                                   }
                               }
+                              
+                              [self.activitySpinner stopAnimating];
                           }];
     };
     
@@ -126,13 +143,11 @@
         getPosts();
     } else if (self.postIndex >= [self.posts count] - 5) {
         // Update queue of posts
-        dispatch_queue_t aQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_async(aQueue, ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             getPosts();
         });
     }
     
-    [self renderCurrentPost];
     self.postIndex += 1;
 }
 
@@ -168,13 +183,28 @@
                          
                          if (queuePost) {
                              [self queueNextPost];
+                             [self.cardViews removeObjectAtIndex:0];
+                             [self.cardViews addObject:[self renderPostWithIndex:self.postIndex]];
+                             [self arrangeCardViews];
                          }
                      }
-                     completion:^(BOOL complete){
+                     completion:^(BOOL complete) {
                          if (complete && queuePost) {
                              [view removeFromSuperview];
                          }
                      }];
+}
+
+- (void)arrangeCardViews
+{
+    CGPoint topCardCenter = [self getPostCenter];
+    int __block index = 0;
+    
+    for (PostItemView *postView in self.cardViews) {
+        int offset = index * 5;
+        postView.center = CGPointMake(topCardCenter.x + offset, topCardCenter.y + offset);
+        index += 1;
+    }
 }
 
 - (CGPoint)getPostCenter
@@ -186,20 +216,28 @@
 
 - (void)touchDismissButton:(UIButton *)sender
 {
-    [[ImageHelper sharedInstance] removeImageWithUrl:self.postView.post.images[0]];
-    [self.sharedAPIClient savePost:self.postView.post asKept:NO];
-    [self animateView:self.postView
-              toPoint:CGPointMake(0 - self.view.frame.size.width + (POSTSIZE / 2), self.postView.center.y + 100)
-           andReplace:YES];
+    if ([self.cardViews count] > 0) {
+        PostItemView *postView = [self.cardViews objectAtIndex:0];
+        
+        [[ImageHelper sharedInstance] removeImageWithUrl:postView.post.images[0]];
+        [self.sharedAPIClient savePost:postView.post asKept:NO];
+        [self animateView:postView
+                  toPoint:CGPointMake(0 - self.view.frame.size.width + (POSTSIZE / 2), postView.center.y + 100)
+               andReplace:YES];
+    }
 }
 
 - (void)touchKeepButton:(UIButton *)sender
 {
-    [self.sharedAPIClient savePost:self.postView.post asKept:YES];
-    [self animateView:self.postView
-              toPoint:CGPointMake(self.view.frame.size.width + (POSTSIZE / 2), self.postView.center.y + 100)
-           andReplace:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"PostKept" object:self];
+    if ([self.cardViews count] > 0) {
+        PostItemView *postView = [self.cardViews objectAtIndex:0];
+
+        [self.sharedAPIClient savePost:postView.post asKept:YES];
+        [self animateView:postView
+                  toPoint:CGPointMake(self.view.frame.size.width + (POSTSIZE / 2), postView.center.y + 100)
+               andReplace:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PostKept" object:self];
+    }
 }
 
 #define PAN_BREAKPOINT 75
@@ -207,34 +245,37 @@
 - (void)panPost:(UIPanGestureRecognizer *)sender
 {
     PostItemView *targetView = (PostItemView *)sender.view;
-    CGPoint translation = [sender translationInView:targetView];
-    CGPoint postCenter = [self getPostCenter];
-    float xDifference = postCenter.x - (sender.view.center.x + translation.x);
-    float newY = sender.view.center.y + translation.y;
     
-    targetView.center = CGPointMake(sender.view.center.x + translation.x, newY);
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        CGPoint newPoint;
-        BOOL queuePost = YES;
+    if (targetView == [self.cardViews objectAtIndex:0]) {
+        CGPoint translation = [sender translationInView:targetView];
+        CGPoint postCenter = [self getPostCenter];
+        float xDifference = postCenter.x - (sender.view.center.x + translation.x);
+        float newY = sender.view.center.y + translation.y;
         
-        if (xDifference > PAN_BREAKPOINT) {
-            [self.sharedAPIClient savePost:self.postView.post asKept:NO];
-            newPoint = CGPointMake(0 - self.view.frame.size.width + (targetView.frame.size.width / 2), self.postView.center.y + PAN_BREAKPOINT);
-        } else if (xDifference < (-1 * PAN_BREAKPOINT)) {
-            [self.sharedAPIClient savePost:self.postView.post asKept:YES];
-            newPoint = CGPointMake(self.view.frame.size.width + (targetView.frame.size.width / 2), self.postView.center.y + PAN_BREAKPOINT);
-        } else {
-            newPoint = postCenter;
-            queuePost = NO;
+        targetView.center = CGPointMake(sender.view.center.x + translation.x, newY);
+        
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            CGPoint newPoint;
+            BOOL queuePost = YES;
+            
+            if (xDifference > PAN_BREAKPOINT) {
+                [self.sharedAPIClient savePost:targetView.post asKept:NO];
+                newPoint = CGPointMake(0 - self.view.frame.size.width + (targetView.frame.size.width / 2), targetView.center.y + PAN_BREAKPOINT);
+            } else if (xDifference < (-1 * PAN_BREAKPOINT)) {
+                [self.sharedAPIClient savePost:targetView.post asKept:YES];
+                newPoint = CGPointMake(self.view.frame.size.width + (targetView.frame.size.width / 2), targetView.center.y + PAN_BREAKPOINT);
+            } else {
+                newPoint = postCenter;
+                queuePost = NO;
+            }
+            
+            [self animateView:targetView
+                      toPoint:newPoint
+                   andReplace:queuePost];
         }
         
-        [self animateView:targetView
-                  toPoint:newPoint
-               andReplace:queuePost];
+        [sender setTranslation:CGPointMake(0, 0) inView:targetView];
     }
-
-    [sender setTranslation:CGPointMake(0, 0) inView:targetView];
 }
 
 - (void)tapPost:(UITapGestureRecognizer *)sender
