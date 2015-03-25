@@ -101,13 +101,18 @@
 - (void)configureWithPost:(Post *)post
 {
     if (post.images && [post.images count] > 0) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
+        if ([[ImageHelper sharedInstance] imageIsCached:post.images[0]]) {
             UIImage *image = [[ImageHelper sharedInstance] getImageWithUrl:post.images[0]];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.thumbnailView.image = image;
+            self.thumbnailView.image = image;
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
+                UIImage *image = [[ImageHelper sharedInstance] getImageWithUrl:post.images[0]];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.thumbnailView.image = image;
+                });
             });
-        });
+        }
     }
     
     self.headlineView.text = post.headline;

@@ -12,4 +12,5 @@
 + (instancetype)sharedInstance;
 - (UIImage *)getImageWithUrl:(NSString *)imageUrl;
 - (void)removeImageWithUrl:(NSString *)imageUrl;
+- (BOOL)imageIsCached:(NSString *)imageUrl;
 @end

@@ -14,18 +14,26 @@
 @end
 
 @implementation ImageHelper
+- (NSCache *)imageCache
+{
+    if (!_imageCache) _imageCache = [[NSCache alloc] init];
+    
+    return _imageCache;
+}
+
 - (instancetype) init
 {
     self = [super init];
-    self.imageCache = [[NSCache alloc] init];
-    
     return self;
 }
 
 + (instancetype)sharedInstance
 {
     static ImageHelper *sharedInstance = nil;
-    sharedInstance = [[ImageHelper alloc] init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
     
     return sharedInstance;
 }
@@ -33,17 +41,25 @@
 - (UIImage *)getImageWithUrl:(NSString *)imageUrl
 {
     UIImage *image = [self.imageCache objectForKey:imageUrl];
-    
+        
     if (image == nil) {
         NSMutableString *imageUrlString = [[NSMutableString alloc] initWithString:@"http://i.kinja-img.com/gawker-media/image/upload/"];
         [imageUrlString appendString:imageUrl];
         
         NSData *imageData = [NSData dataWithContentsOfURL:[[NSURL alloc] initWithString:imageUrlString]];
         image = [[UIImage alloc] initWithData:imageData];
+        
         [self.imageCache setObject:image forKey:imageUrl];
     }
     
     return image;
+}
+
+- (BOOL)imageIsCached:(NSString *)imageUrl
+{
+    if ([self.imageCache objectForKey:imageUrl] != nil) return YES;
+    
+    return NO;
 }
 
 - (void)removeImageWithUrl:(NSString *)imageUrl

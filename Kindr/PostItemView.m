@@ -59,7 +59,7 @@
     [headlineView setEditable:NO];
     [headlineView setScrollEnabled:NO];
     CGSize headlineSize = [headlineView sizeThatFits:CGSizeMake(self.frame.size.width, FLT_MAX)];
-    headlineView.frame = CGRectMake(cornerRadius, cornerRadius, self.frame.size.width, headlineSize.height - (2 * cornerRadius));
+    headlineView.frame = CGRectMake(cornerRadius, cornerRadius, self.frame.size.width, headlineSize.height);
     [self addSubview:headlineView];
     headlineView.center = CGPointMake(headlineView.frame.size.width / 2, self.frame.size.height - (headlineView.frame.size.height / 2) - cornerRadius);
     
